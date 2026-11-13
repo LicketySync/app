@@ -1,4 +1,4 @@
-# Lickety-Sync — app
+# LicketySync — app
 
 The shared web UI (Rust, compiled to WebAssembly) and the Tauri 2 shells for
 Windows, macOS, Linux, Android and iOS. One interface everywhere; the shell owns
