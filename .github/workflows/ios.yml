@@ -1,0 +1,130 @@
+# The iOS shell (spike C, C2), on every push to main and every pull request:
+# an unsigned debug build for the iOS simulator (Apple silicon), uploaded as
+# an artifact with the generated project's entitlements and Info.plist printed
+# beside it; then, not blocking, the app opened in a simulator and a
+# screenshot uploaded. The Xcode project is generated here, by the Tauri
+# command line and XcodeGen, since neither runs anywhere but macOS. On iOS the
+# net crate builds no swarm yet (no process-memory limit there, TM-22's
+# residual (d)), so the page reports the QUIC loopback as failed: C4 is
+# compile-only on iOS. The pinning rule is in checks.yml's header.
+#
+# Xcode's "Build Rust Code" phase runs cargo without RUSTUP_TOOLCHAIN (the
+# Tauri command line drops it when it starts xcodebuild), so a rustup override
+# for app/ pins it there. Tauri's `ios init` would install with Homebrew, at
+# whatever version, each of XcodeGen, libimobiledevice and CocoaPods it does
+# not find, and asks Homebrew which are outdated: here it finds the pinned
+# XcodeGen, the runner image's CocoaPods, and a stand-in for libimobiledevice's
+# idevicesyslog (a device tool, which a simulator build never runs), and
+# Homebrew neither updates itself nor sends analytics.
+name: ios
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_ANALYTICS: "1"
+
+jobs:
+  simulator:
+    name: simulator build (unsigned)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: app
+          persist-credentials: false
+      - run: app/ci/pins-to-env.sh >> "$GITHUB_ENV"
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
+        with:
+          toolchain: ${{ env.RUST_STABLE }}
+          targets: aarch64-apple-ios-sim
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          workspaces: app
+          cache-workspace-crates: false
+      - name: Pin Rust for Xcode's build phase too
+        run: rustup override set "$RUST_STABLE"
+        working-directory: app
+      - name: Use the pinned Xcode
+        run: |
+          app="/Applications/Xcode_$XCODE.app"
+          if [ ! -d "$app" ]; then
+            echo "Xcode $XCODE is not on this runner image; it has:" >&2
+            ls -d /Applications/Xcode_*.app >&2
+            exit 1
+          fi
+          sudo xcode-select --switch "$app"
+          xcodebuild -version
+      - name: Install XcodeGen
+        run: |
+          zip="$RUNNER_TEMP/xcodegen.zip"
+          curl -fsSL --retry 3 -o "$zip" \
+            "https://github.com/yonaskolb/XcodeGen/releases/download/$XCODEGEN/xcodegen.zip"
+          echo "$XCODEGEN_SHA256  $zip" | shasum -a 256 --check --strict
+          unzip -q "$zip" -d "$RUNNER_TEMP/xcodegen"
+          echo "$RUNNER_TEMP/xcodegen/xcodegen/bin" >> "$GITHUB_PATH"
+      - name: Leave ios init nothing to install
+        run: |
+          command -v pod
+          if ! command -v idevicesyslog; then
+            mkdir -p "$RUNNER_TEMP/stand-ins"
+            printf '#!/bin/sh\necho "a stand-in: the simulator build runs no device tool" >&2\nexit 1\n' \
+              > "$RUNNER_TEMP/stand-ins/idevicesyslog"
+            chmod +x "$RUNNER_TEMP/stand-ins/idevicesyslog"
+            echo "$RUNNER_TEMP/stand-ins" >> "$GITHUB_PATH"
+          fi
+      - run: cargo install tauri-cli --version "$TAURI_CLI" --locked
+      - run: cargo tauri ios init --ci
+        working-directory: app/mobile
+      # C3's evidence on iOS: the entitlements and Info.plist the generated
+      # project gives the app (expected: no entitlements).
+      - name: Print the generated entitlements and Info.plist
+        run: |
+          for f in app/mobile/gen/apple/*_iOS/*.entitlements app/mobile/gen/apple/*_iOS/Info.plist; do
+            echo "== $f"
+            plutil -p "$f"
+          done
+      - run: cargo tauri ios build --ci --debug --no-sign --target aarch64-sim
+        working-directory: app/mobile
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ios-simulator-app
+          path: |
+            app/mobile/gen/apple/build/arm64-sim/*.app
+            app/mobile/gen/apple/*_iOS/*.entitlements
+            app/mobile/gen/apple/*_iOS/Info.plist
+          if-no-files-found: error
+          retention-days: 7
+      # The stretch: boot a simulator of the newest iPhone the image has,
+      # install and open the app, and take a screenshot. Not blocking.
+      - name: Open the app in a simulator
+        continue-on-error: true
+        run: |
+          device=$(xcrun simctl list devices available iPhone | awk -F '[()]' '/iPhone/ { id = $2 } END { print id }')
+          xcrun simctl boot "$device"
+          xcrun simctl bootstatus "$device"
+          xcrun simctl install "$device" app/mobile/gen/apple/build/arm64-sim/LicketySync.app
+          xcrun simctl launch "$device" com.licketysync.mobile
+          mkdir -p simulator
+          # The page's loopback check ends at once on iOS; 30 s is ample.
+          sleep 30
+          xcrun simctl io "$device" screenshot simulator/screenshot.png
+          xcrun simctl shutdown "$device"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        continue-on-error: true
+        with:
+          name: ios-simulator-screenshot
+          path: simulator
+          if-no-files-found: error
+          retention-days: 30

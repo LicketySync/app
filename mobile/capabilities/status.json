@@ -1,0 +1,6 @@
+{
+  "identifier": "status",
+  "description": "The page's one command, status: the test seed's peer ID and the QUIC loopback check.",
+  "windows": ["main"],
+  "permissions": ["allow-status"]
+}

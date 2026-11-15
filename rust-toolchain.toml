@@ -1,0 +1,5 @@
+# Stable, as in core: gate.sh stops unless it is ci/pins.env's RUST_STABLE,
+# and CI sets RUSTUP_TOOLCHAIN to that version.
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]

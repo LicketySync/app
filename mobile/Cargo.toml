@@ -1,0 +1,43 @@
+[package]
+name = "licketysync-mobile"
+description = "The phone shell: a Tauri 2 app for Android and iOS that shows the shared web UI and links the core crates."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lib]
+# The Android build loads the cdylib, the iOS build links the staticlib.
+name = "licketysync_mobile"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+# The core crates from the public core repository at CORE_REV (ci/pins.env;
+# gate.sh checks that both revs are it).
+[dependencies]
+licketysync-keys = { git = "https://github.com/licketysync/core", rev = "6beadae98da55b8e055bd4e575ed69b373ee9102" }
+licketysync-net = { git = "https://github.com/licketysync/core", rev = "6beadae98da55b8e055bd4e575ed69b373ee9102" }
+libp2p-core = "0.44.0"
+libp2p-swarm = "0.48.0"
+futures = "0.3.34"
+tokio = { version = "1.54.1", default-features = false, features = ["time"] }
+
+# Tauri only for the phones: its desktop back ends need GTK and WebKitGTK,
+# which the host builds and tests do without (the crate's docs say what the
+# host gets). No updater and no plugin but the shell's own navigation guard
+# (TM-29). `custom-protocol` serves the page from the app itself, the shipped
+# mode, in every build, debug ones included.
+[target.'cfg(any(target_os = "android", target_os = "ios"))'.dependencies]
+tauri = { version = "2.12.5", default-features = false, features = ["wry", "isolation", "custom-protocol"] }
+serde = { version = "1.0.229", features = ["derive"] }
+
+[build-dependencies]
+tauri-build = { version = "2.7.4", default-features = false, features = ["isolation"] }
+
+[dev-dependencies]
+serde_json = "1.0.154"
+tokio = { version = "1.54.1", default-features = false, features = ["macros", "rt-multi-thread", "time"] }
+
+[lints]
+workspace = true

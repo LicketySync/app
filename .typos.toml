@@ -1,0 +1,11 @@
+[default]
+extend-ignore-re = ["(?i)licketysync"]
+
+[default.extend-words]
+# Crate names in supply-chain/ (flate2, writeable).
+flate = "flate"
+writeable = "writeable"
+
+[files]
+# Cargo's lock, and what Tauri and Gradle generate or build.
+extend-exclude = ["target/", "Cargo.lock", "mobile/gen/", "mobile/icons/"]

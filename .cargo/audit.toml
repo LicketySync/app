@@ -1,0 +1,9 @@
+# cargo-audit's settings: gate.sh and CI run `cargo audit --deny warnings`, so
+# every advisory fails but these, the same list as deny.toml's (which says
+# why for each).
+[advisories]
+ignore = [
+  "RUSTSEC-2024-0436", # paste: unmaintained build-time proc macro beneath if-watch's netlink crates
+  "RUSTSEC-2024-0370", # proc-macro-error: beneath gtk, Tauri's Linux desktop back end, never built
+  "RUSTSEC-2024-0429", # glib: unsound iterator, beneath gtk, never built
+]

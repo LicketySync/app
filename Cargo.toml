@@ -1,0 +1,40 @@
+[workspace]
+# Not 3, edition 2024's default, which picks dependency versions whose
+# rust-version fits ours over the newest (as in core).
+resolver = "2"
+members = ["mobile"]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+license = "MPL-2.0"
+repository = "https://github.com/licketysync/app"
+# Tauri 2.12's.
+rust-version = "1.90"
+
+# Core's lint policy (core/Cargo.toml), the mechanical part of the plan's
+# Engineering practice.
+[workspace.lints.rust]
+unsafe_code = "forbid"          # platform-FFI crates opt out explicitly
+dead_code = "deny"
+unused = { level = "deny", priority = -1 }
+unreachable_pub = "warn"
+missing_docs = "warn"
+unused_crate_dependencies = "warn"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"            # no unwrap or expect outside tests
+expect_used = "deny"
+panic = "deny"
+indexing_slicing = "warn"
+todo = "deny"
+dbg_macro = "deny"
+print_stdout = "warn"
+print_stderr = "warn"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

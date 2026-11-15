@@ -1,0 +1,2260 @@
+
+# cargo-vet config file
+
+[cargo-vet]
+version = "0.10"
+
+[imports.bytecode-alliance]
+url = "https://raw.githubusercontent.com/bytecodealliance/wasmtime/main/supply-chain/audits.toml"
+
+[imports.google]
+url = "https://raw.githubusercontent.com/google/supply-chain/main/audits.toml"
+
+[imports.isrg]
+url = "https://raw.githubusercontent.com/divviup/libprio-rs/main/supply-chain/audits.toml"
+
+[imports.mozilla]
+url = "https://raw.githubusercontent.com/mozilla/supply-chain/main/audits.toml"
+
+[imports.zcash]
+url = "https://raw.githubusercontent.com/zcash/rust-ecosystem/main/supply-chain/audits.toml"
+
+[[exemptions.aead]]
+version = "0.5.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): AEAD traits beneath snow's chacha20poly1305 0.10 and aes-gcm (deny.toml wrappers); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.aead]]
+version = "0.6.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): AEAD traits beneath chacha20poly1305 (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.aes]]
+version = "0.8.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): AES beneath aes-gcm in snow's RustCrypto resolver, compiled on wasm32 only and never selected by libp2p-noise (deny.toml-wrapped to aes-gcm); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.aes-gcm]]
+version = "0.10.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): AES-GCM in snow's RustCrypto resolver, compiled on wasm32 only and never selected by libp2p-noise (ChaChaPoly only; deny.toml-wrapped to snow); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.aho-corasick]]
+version = "1.1.5"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.android_system_properties]]
+version = "0.1.6"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.anyhow]]
+version = "1.0.104"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, a dependency of prost-derive's proc macro; dtolnay, whom the Mozilla, ISRG and Bytecode Alliance sets trust. Not covered by the imported audits at this version."
+
+[[exemptions.arrayvec]]
+version = "0.7.8"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): stack vectors beneath blake3 and bip39's hashes; bluss, widely used. Not covered by the imported audits at this version."
+
+[[exemptions.asn1-rs]]
+version = "0.7.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): ASN.1 parsing beneath x509-parser and der-parser; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.asn1-rs-derive]]
+version = "0.6.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time derive macros of asn1-rs; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.asn1-rs-impl]]
+version = "0.2.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time proc macros of asn1-rs; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.async-io]]
+version = "2.6.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): async I/O beneath if-watch; smol-rs. Not covered by the imported audits at this version."
+
+[[exemptions.atk]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.atk-sys]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.autocfg]]
+version = "1.5.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): build-time only, the build scripts of num-traits (beneath proptest and der-parser's num-bigint) and async-io; cuviper. Not covered by the imported audits at this version."
+
+[[exemptions.aws-lc-rs]]
+version = "1.18.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): rustls's crypto provider (suites.md 3.1; deny.toml wrappers rustls, rustls-webpki, quinn-proto), never called directly; aws/aws-lc-rs. AWS-LC's FIPS build is FIPS 140-3 validated, this build is not the FIPS one. Not covered by the imported audits at this version."
+
+[[exemptions.aws-lc-sys]]
+version = "0.46.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): AWS-LC itself, C and assembly built by its build script with the system C compiler and prebuilt NASM objects on Windows (suites.md 3.1; deny.toml wrapper aws-lc-rs); aws/aws-lc-rs. Not covered by the imported audits at this version."
+
+[[exemptions.base-x]]
+version = "0.2.11"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a multibase encoding beneath multibase. Not covered by the imported audits at this version."
+
+[[exemptions.base256emoji]]
+version = "1.0.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a multibase encoding beneath multibase. Not covered by the imported audits at this version."
+
+[[exemptions.base45]]
+version = "3.2.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a multibase encoding beneath multibase. Not covered by the imported audits at this version."
+
+[[exemptions.base64]]
+version = "0.23.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): base64url of the certificate hash in join links (keys.md 6.3), built with default features off and alloc only, so the simd-unsafe feature's code is not compiled; marshallpierce; 0.22.1 was covered by the Google import (Dependabot review of 2026-10-18). Not covered by the imported audits at this version."
+
+[[exemptions.bech32]]
+version = "0.12.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): the approved key-string encoding (suites.md 3.2), Bech32m only and never its error-correction API; rust-bitcoin; 0.12.0 reviewed in the Dependabot review of 2026-10-18 (the key-string vectors are byte-identical to 0.11.1's). Not covered by the imported audits at this version."
+
+[[exemptions.bip39]]
+version = "3.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): the approved encoding of the write key's words (suites.md 3.2), English only, zeroize feature, no seed function; rust-bitcoin; the Trezor vectors pass here. Not covered by the imported audits at this version."
+
+[[exemptions.bitcoin_hashes]]
+version = "0.14.101"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): SHA-256 for the BIP39 checksum inside bip39 only (deny.toml wrapper); rust-bitcoin. Not covered by the imported audits at this version."
+
+[[exemptions.bitflags]]
+version = "2.13.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): flags types beneath rustix, nix, the netlink crates and system-configuration (licketysync-net), and proptest; KodrAus. Not covered by the imported audits at this version."
+
+[[exemptions.blake3]]
+version = "1.8.7"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): the approved hash (suites.md 3.1), called only from licketysync-keys' labels module; the BLAKE3 team's reference implementation; the official vectors pass here. Not covered by the imported audits at this version."
+
+[[exemptions.block-buffer]]
+version = "0.12.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): block buffering beneath the RustCrypto hashes; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.bs58]]
+version = "0.5.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.bytemuck]]
+version = "1.25.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.bytes]]
+version = "1.12.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): prost's buffer type; tokio-rs (Darksonn), whom the Mozilla and Bytecode Alliance sets trust. Not covered by the imported audits at this version."
+
+[[exemptions.cairo-rs]]
+version = "0.18.5"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.cairo-sys-rs]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.cargo-platform]]
+version = "0.1.9"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.cargo_metadata]]
+version = "0.17.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.cargo_toml]]
+version = "1.0.1"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.cc]]
+version = "1.10.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, blake3's build script; rust-lang; 1.10.0 read in the weekly refresh of 2026-11-02 (its diff from 1.8.0: libtool support, compile_commands.json output, AddressSanitizer flags passed on to the C compiler, Cargo's variables read from its environment snapshot, RUSTC_WRAPPER applied to the cl.exe it finds itself, MSVC archiver paths relative to the output directory, regenerated target tables, and jobserver and process-exit polling in its parallel module, whose new unsafe code is libc and Windows calls for pipes, kqueue and semaphores). Not covered by the imported audits at this version."
+
+[[exemptions.cesu8]]
+version = "1.1.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.cfb]]
+version = "0.14.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.cfg-expr]]
+version = "0.15.8"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.cfg-if]]
+version = "1.0.5"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build configuration helper; rust-lang (alexcrichton). Not covered by the imported audits at this version."
+
+[[exemptions.cfg_aliases]]
+version = "0.1.1"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.chacha20poly1305]]
+version = "0.11.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): the approved XChaCha20-Poly1305 (suites.md 3.1), alloc feature only; RustCrypto, NCC Group audit 2020; the XChaCha draft vector passes here. Not covered by the imported audits at this version."
+
+[[exemptions.chrono]]
+version = "0.4.45"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.cipher]]
+version = "0.5.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): cipher traits beneath chacha20 and chacha20poly1305 (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.cmake]]
+version = "0.1.58"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time only, beneath aws-lc-sys (its CMake path, used on targets without its cc build); rust-lang. Not covered by the imported audits at this version."
+
+[[exemptions.cmov]]
+version = "0.5.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): constant-time conditional moves beneath ctutils; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.combine]]
+version = "4.6.9"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.concurrent-queue]]
+version = "2.5.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a queue beneath async-io and polling; smol-rs. Not covered by the imported audits at this version."
+
+[[exemptions.const-oid]]
+version = "0.10.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): object identifiers beneath digest (sha2 0.11); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.const-str]]
+version = "0.4.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): compile-time strings beneath base256emoji. Not covered by the imported audits at this version."
+
+[[exemptions.constant_time_eq]]
+version = "0.4.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): constant-time comparison beneath blake3; cesarb. Not covered by the imported audits at this version."
+
+[[exemptions.cookie]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.core-foundation]]
+version = "0.10.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): macOS bindings beneath security-framework, beneath rustls-native-certs (wtransport; the listener never loads native roots); servo. Not covered by the imported audits at this version."
+
+[[exemptions.core-graphics]]
+version = "0.25.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.cpufeatures]]
+version = "0.2.17"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): CPU feature detection beneath the RustCrypto 0.10-generation crates under snow; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.crc32fast]]
+version = "1.5.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.crossbeam-channel]]
+version = "0.5.4"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.crossbeam-utils]]
+version = "0.8.23"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): concurrency utilities beneath concurrent-queue; crossbeam-rs. Not covered by the imported audits at this version."
+
+[[exemptions.crypto-common]]
+version = "0.1.7"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): common traits beneath digest 0.10 and cipher 0.4 under snow; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.crypto-common]]
+version = "0.2.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): common traits beneath the RustCrypto crates; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.ctor]]
+version = "1.0.13"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.ctr]]
+version = "0.9.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): CTR mode beneath aes-gcm in snow's unused AES-GCM, on wasm32 only (deny.toml-wrapped to aes-gcm); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.ctutils]]
+version = "0.4.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): constant-time helpers beneath the RustCrypto crates; RustCrypto; 0.4.4 reviewed in the RUSTSEC-2026-0385 fix of 2026-10-23, and 0.4.6 in the weekly refresh of 2026-11-02 (its diff from 0.4.4: the comparison macros move, with the same formulas, into a new public primitives module, which adds borrowing-subtraction, zero-count and carry helpers; optimization barriers on Thumb-1 alone; tests; still forbids unsafe code). Not covered by the imported audits at this version."
+
+[[exemptions.curve25519-dalek]]
+version = "5.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): curve arithmetic beneath ed25519-dalek (deny.toml wrapper); dalek-cryptography. Not covered by the imported audits at this version."
+
+[[exemptions.curve25519-dalek-derive]]
+version = "0.1.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): proc macro of curve25519-dalek; dalek-cryptography. Not covered by the imported audits at this version."
+
+[[exemptions.darling]]
+version = "0.24.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.darling_core]]
+version = "0.24.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.darling_macro]]
+version = "0.24.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.data-encoding]]
+version = "2.11.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): base32/base64 beneath multibase, multiaddr and x509-parser; ia0. Not covered by the imported audits at this version."
+
+[[exemptions.data-encoding-macro]]
+version = "0.1.21"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): compile-time data-encoding beneath multibase; ia0. Not covered by the imported audits at this version."
+
+[[exemptions.data-encoding-macro-internal]]
+version = "0.1.19"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time proc macro of data-encoding-macro; ia0. Not covered by the imported audits at this version."
+
+[[exemptions.der-parser]]
+version = "10.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): DER parsing beneath x509-parser; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.deranged]]
+version = "0.5.9"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): ranged integers beneath time; jhpratt. Not covered by the imported audits at this version."
+
+[[exemptions.derive_more]]
+version = "2.1.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.derive_more-impl]]
+version = "2.1.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.digest]]
+version = "0.10.7"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): hash traits beneath sha2 0.10 and blake2 under snow; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.digest]]
+version = "0.11.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): hash traits beneath the RustCrypto hashes; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.dirs]]
+version = "7.0.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.dirs-sys]]
+version = "0.3.7"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.dispatch2]]
+version = "0.3.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.displaydoc]]
+version = "0.2.7"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a Display derive beneath asn1-rs and der-parser (x509-parser, in libp2p-tls); yaahc. Not covered by the imported audits at this version."
+
+[[exemptions.dlopen2]]
+version = "0.8.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.dlopen2_derive]]
+version = "0.4.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.dom_query]]
+version = "0.28.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.dpi]]
+version = "0.1.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.dtoa]]
+version = "1.0.11"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.dtoa-short]]
+version = "0.3.5"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.dyn-clone]]
+version = "1.0.19"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.ed25519]]
+version = "3.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): Ed25519 signature types beneath ed25519-dalek (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.ed25519-dalek]]
+version = "3.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): the approved Ed25519 (suites.md 3.1), verify_strict only; dalek-cryptography, active upstream; RFC 8032 vectors pass here. Not covered by the imported audits at this version."
+
+[[exemptions.either]]
+version = "1.19.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, a dependency of itertools; bluss. Not covered by the imported audits at this version."
+
+[[exemptions.embed-resource]]
+version = "3.0.12"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.embed_plist]]
+version = "1.2.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.equivalent]]
+version = "1.0.3"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.erased-serde]]
+version = "0.4.11"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.fastbloom]]
+version = "0.17.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the bloom filter beneath quinn-proto (bloom feature, which libp2p-quic turns on). Not covered by the imported audits at this version."
+
+[[exemptions.fastrand]]
+version = "2.5.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.field-offset]]
+version = "0.3.6"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.find-msvc-tools]]
+version = "0.1.15"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, beneath cc; rust-lang; 0.1.15 read in the weekly refresh of 2026-11-02 (its diff from 0.1.14: two more Windows API bindings, OpenSemaphoreA and WaitForMultipleObjects, and their constants). Not covered by the imported audits at this version."
+
+[[exemptions.flate2]]
+version = "1.1.11"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.foreign-types-macros]]
+version = "0.2.4"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.fs_extra]]
+version = "1.3.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time only, copying sources in aws-lc-sys's build script; webdesus. Not covered by the imported audits at this version."
+
+[[exemptions.futures-lite]]
+version = "2.6.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): async helpers beneath async-io; smol-rs. Not covered by the imported audits at this version."
+
+[[exemptions.futures-rustls]]
+version = "0.26.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): rustls over futures I/O beneath libp2p-tls (TCP); rustls. Not covered by the imported audits at this version."
+
+[[exemptions.futures-task]]
+version = "0.3.21"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.futures-timer]]
+version = "3.0.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): timers beneath libp2p-core, -swarm, -tcp and -quic (the handshake and idle timeouts); async-rs. Not covered by the imported audits at this version."
+
+[[exemptions.futures-util]]
+version = "0.3.21"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.gdk]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gdk-pixbuf]]
+version = "0.18.5"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gdk-pixbuf-sys]]
+version = "0.18.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gdk-sys]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gdkwayland-sys]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.generic-array]]
+version = "0.14.7"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): fixed arrays beneath the RustCrypto 0.10-generation crates under snow; widely used. Not covered by the imported audits at this version."
+
+[[exemptions.getrandom]]
+version = "0.2.2"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.ghash]]
+version = "0.5.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): GHASH beneath aes-gcm in snow's unused AES-GCM, on wasm32 only (deny.toml-wrapped to aes-gcm); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.gio]]
+version = "0.18.4"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gio-sys]]
+version = "0.18.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.glib]]
+version = "0.18.5"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.glib-macros]]
+version = "0.18.5"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.glib-sys]]
+version = "0.18.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.glob]]
+version = "0.3.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.gobject-sys]]
+version = "0.18.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gtk]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gtk-sys]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.gtk3-macros]]
+version = "0.18.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.hashbrown]]
+version = "0.14.2"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.hashlink]]
+version = "0.12.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): an LRU map beneath libp2p-swarm. Not covered by the imported audits at this version."
+
+[[exemptions.hermit-abi]]
+version = "0.5.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): HermitOS bindings beneath polling (HermitOS only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.hex-conservative]]
+version = "0.2.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): hex helper beneath bitcoin_hashes; rust-bitcoin. Not covered by the imported audits at this version."
+
+[[exemptions.hkdf]]
+version = "0.13.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): HKDF-SHA256 inside libp2p-identity's derive_secret only, QUIC's stateless-reset key (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.hmac]]
+version = "0.13.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): HMAC beneath hkdf only (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.html5ever]]
+version = "0.39.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.http]]
+version = "1.5.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.http-body]]
+version = "1.1.0"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.http-body-util]]
+version = "0.1.5"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.httparse]]
+version = "1.10.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.hybrid-array]]
+version = "0.4.15"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): fixed-size array types beneath the RustCrypto crates; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.hyper]]
+version = "1.12.0"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.hyper-util]]
+version = "0.1.21"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.iana-time-zone]]
+version = "0.1.65"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.ico]]
+version = "0.6.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.icu_collections]]
+version = "2.4.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.icu_locale_core]]
+version = "2.4.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.icu_properties]]
+version = "2.4.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.icu_properties_data]]
+version = "2.4.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.icu_provider]]
+version = "2.4.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.ident_case]]
+version = "1.0.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.idna]]
+version = "0.4.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.idna_adapter]]
+version = "1.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the ASCII-only IDNA back end beneath idna (url, beneath multiaddr), chosen by its version as idna documents: 212 lines of stubs, no dependencies, no unsafe code, read 2026-11-03. 1.2.2 is the ICU4X back end, whose baked data cargo-geiger cannot scan (deny.toml bans it). hsivonen. Not covered by the imported audits at this version."
+
+[[exemptions.if-addrs]]
+version = "0.15.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): interface addresses beneath if-watch. Not covered by the imported audits at this version."
+
+[[exemptions.if-watch]]
+version = "3.2.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): interface address watching beneath libp2p-tcp and libp2p-quic (listening on loopback only in phase 0); libp2p. Not covered by the imported audits at this version."
+
+[[exemptions.indexmap]]
+version = "1.8.1"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.indexmap]]
+version = "2.14.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.infer]]
+version = "0.22.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.inout]]
+version = "0.2.5"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): in-place buffer types beneath aead and cipher; RustCrypto; 0.2.5 read in the weekly refresh of 2026-11-02 (its diff from 0.2.4: into_padded_blocks returns PadError, where it had a debug assertion, when a Padding implementation breaks the buffer's invariants). Not covered by the imported audits at this version."
+
+[[exemptions.ipnet]]
+version = "2.5.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.itertools]]
+version = "0.14.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, a dependency of prost-derive; rust-itertools. Not covered by the imported audits at this version."
+
+[[exemptions.itoa]]
+version = "1.0.18"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): dev-only via serde_json; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.javascriptcore-rs]]
+version = "1.1.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.javascriptcore-rs-sys]]
+version = "1.1.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jiff]]
+version = "0.2.40"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jiff-core]]
+version = "0.1.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jiff-static]]
+version = "0.2.40"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jiff-tzdb]]
+version = "0.1.9"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jiff-tzdb-platform]]
+version = "0.1.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jni]]
+version = "0.21.1"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.jni-sys]]
+version = "0.3.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.jni-sys]]
+version = "0.4.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.jni-sys-macros]]
+version = "0.4.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.jobserver]]
+version = "0.1.35"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time only, the make jobserver beneath cc (aws-lc-sys's and ring's builds); rust-lang. Not covered by the imported audits at this version."
+
+[[exemptions.js-sys]]
+version = "0.3.85"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.json-patch]]
+version = "4.2.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.jsonptr]]
+version = "0.7.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.keyboard-types]]
+version = "0.8.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.lazy_static]]
+version = "1.5.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): statics beneath x509-parser; rust-lang-nursery. Not covered by the imported audits at this version."
+
+[[exemptions.libc]]
+version = "0.2.191"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): platform bindings beneath cpufeatures and getrandom; rust-lang; 0.2.191 read in the weekly refresh of 2026-11-02 (its diff from 0.2.190: constants and types for Apple, FreeBSD, Haiku, Hurd, NuttX, OpenBSD, QuRT, WASI and Emscripten, and build-script cfgs for Emscripten versions; Android's prop_info made an opaque extern type; AIX's statvfs.f_fsid back to c_ulong; FreeBSD aarch64's gpregs and fpregs fixed; nothing for Linux on x86_64). Not covered by the imported audits at this version."
+
+[[exemptions.libm]]
+version = "0.2.16"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): pure-Rust math beneath fastbloom; rust-lang. Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-connection-limits]]
+version = "0.7.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-core]]
+version = "0.44.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-identity]]
+version = "0.3.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p identity key with the ed25519 and peerid features only (suites.md 3.1), deny.toml wrapper of ed25519-dalek, sha2 and hkdf; rust-libp2p. Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-memory-connection-limits]]
+version = "0.6.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-quic]]
+version = "0.14.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the QUIC transport (suites.md 2.6 and 3.1) on quinn, deny.toml-wrapped to net; rust-libp2p. Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-swarm]]
+version = "0.48.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-swarm-derive]]
+version = "0.36.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-tcp]]
+version = "0.45.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-tls]]
+version = "0.7.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): TLS 1.3 for QUIC and TCP on aws-lc-rs (suites.md 2.6 and 3.1), deny.toml-wrapped to net and libp2p-quic; rust-libp2p. Not covered by the imported audits at this version."
+
+[[exemptions.libp2p-yamux]]
+version = "0.48.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.libredox]]
+version = "0.1.25"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.linux-raw-sys]]
+version = "0.12.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Linux system-call bindings beneath rustix (Linux only); sunfishcode. Not covered by the imported audits at this version."
+
+[[exemptions.litemap]]
+version = "0.8.3"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.lock_api]]
+version = "0.4.14"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): lock traits beneath parking_lot; Amanieu. Not covered by the imported audits at this version."
+
+[[exemptions.log]]
+version = "0.4.34"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the log facade beneath yamux, if-watch and the netlink crates; rust-lang. Not covered by the imported audits at this version."
+
+[[exemptions.markup5ever]]
+version = "0.39.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.match-lookup]]
+version = "0.1.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a proc macro beneath base256emoji. Not covered by the imported audits at this version."
+
+[[exemptions.memchr]]
+version = "2.8.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): byte search beneath nom (x509-parser), futures-util and sysinfo (licketysync-net), and serde_json in tests; BurntSushi. Not covered by the imported audits at this version."
+
+[[exemptions.memoffset]]
+version = "0.9.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.memory-stats]]
+version = "1.2.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the process's resident memory, read by libp2p-memory-connection-limits (TM-22) and by the flood test; Arc-blroth. Not covered by the imported audits at this version."
+
+[[exemptions.mime]]
+version = "0.3.18"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.minimal-lexical]]
+version = "0.2.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): float parsing beneath nom (x509-parser's parser); Alexhuszagh. Not covered by the imported audits at this version."
+
+[[exemptions.miniz_oxide]]
+version = "0.9.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.mio]]
+version = "1.2.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): non-blocking I/O beneath tokio; tokio-rs. Not covered by the imported audits at this version."
+
+[[exemptions.muda]]
+version = "0.20.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.multiaddr]]
+version = "0.19.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): libp2p addresses beneath libp2p-core; multiformats/rust-multiaddr. Not covered by the imported audits at this version."
+
+[[exemptions.multibase]]
+version = "0.9.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): multiaddr's text encodings beneath multiaddr; multiformats/rust-multibase. Not covered by the imported audits at this version."
+
+[[exemptions.multihash]]
+version = "0.19.5"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): peer ID multihashes beneath libp2p-identity and libp2p-core; multiformats/rust-multihash. Not covered by the imported audits at this version."
+
+[[exemptions.multistream-select]]
+version = "0.14.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.ndk]]
+version = "0.9.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.ndk-context]]
+version = "0.1.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.ndk-sys]]
+version = "0.6.0+11769913"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.netlink-packet-core]]
+version = "0.8.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Linux netlink beneath if-watch (interface changes; Linux only); rust-netlink. Not covered by the imported audits at this version."
+
+[[exemptions.netlink-packet-route]]
+version = "0.28.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Linux netlink route messages beneath if-watch; rust-netlink. Not covered by the imported audits at this version."
+
+[[exemptions.netlink-proto]]
+version = "0.12.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Linux netlink protocol beneath if-watch; rust-netlink. Not covered by the imported audits at this version."
+
+[[exemptions.netlink-sys]]
+version = "0.8.8"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Linux netlink sockets beneath if-watch; rust-netlink. Not covered by the imported audits at this version."
+
+[[exemptions.new_debug_unreachable]]
+version = "1.0.6"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.nix]]
+version = "0.15.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.nohash-hasher]]
+version = "0.2.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): an identity hasher for yamux's stream table; paritytech. Not covered by the imported audits at this version."
+
+[[exemptions.ntapi]]
+version = "0.4.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows native API bindings beneath sysinfo (Windows only). Not covered by the imported audits at this version."
+
+[[exemptions.num-bigint]]
+version = "0.4.8"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): big integers beneath der-parser (certificate serial numbers); cuviper. Not covered by the imported audits at this version."
+
+[[exemptions.num-integer]]
+version = "0.1.47"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): integer traits beneath num-bigint; cuviper. Not covered by the imported audits at this version."
+
+[[exemptions.num_enum]]
+version = "0.7.6"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.num_enum_derive]]
+version = "0.7.6"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-app-kit]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-cloud-kit]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-core-data]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-core-image]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-core-location]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-core-text]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-exception-helper]]
+version = "0.1.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-io-kit]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): macOS IOKit bindings beneath sysinfo (macOS only); madsmtm. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-ui-kit]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-user-notifications]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.objc2-web-kit]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.oid-registry]]
+version = "0.8.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): OID names beneath x509-parser; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.once_cell]]
+version = "1.12.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.pango]]
+version = "0.18.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.pango-sys]]
+version = "0.18.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.parking_lot]]
+version = "0.12.5"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): locks beneath libp2p-core and yamux; Amanieu. Not covered by the imported audits at this version."
+
+[[exemptions.parking_lot_core]]
+version = "0.9.12"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): lock internals beneath parking_lot; Amanieu. Not covered by the imported audits at this version."
+
+[[exemptions.paste]]
+version = "1.0.10"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.pem]]
+version = "3.0.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): PEM encoding beneath rcgen (not used for any key of ours); jcreekmore. Not covered by the imported audits at this version."
+
+[[exemptions.phf]]
+version = "0.8.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.phf_codegen]]
+version = "0.13.1"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.phf_generator]]
+version = "0.8.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.phf_macros]]
+version = "0.13.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.phf_shared]]
+version = "0.8.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.pin-project]]
+version = "1.1.13"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): pin projection beneath libp2p-core, multistream-select and yamux; taiki-e. Not covered by the imported audits at this version."
+
+[[exemptions.pin-project-internal]]
+version = "1.1.13"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time proc macro of pin-project; taiki-e. Not covered by the imported audits at this version."
+
+[[exemptions.pin-project-lite]]
+version = "0.2.17"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): pin projection beneath tokio, quinn and futures; taiki-e. Not covered by the imported audits at this version."
+
+[[exemptions.plist]]
+version = "1.10.3"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.png]]
+version = "0.18.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.polling]]
+version = "3.11.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): epoll/kqueue/IOCP beneath async-io; smol-rs. Not covered by the imported audits at this version."
+
+[[exemptions.poly1305]]
+version = "0.9.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): Poly1305 beneath chacha20poly1305 (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.polyval]]
+version = "0.6.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): POLYVAL beneath ghash in snow's unused AES-GCM, on wasm32 only (deny.toml-wrapped to ghash); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.portable-atomic]]
+version = "1.15.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): atomics beneath fastbloom; taiki-e. Not covered by the imported audits at this version."
+
+[[exemptions.portable-atomic-util]]
+version = "0.2.8"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.potential_utf]]
+version = "0.1.6"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.powerfmt]]
+version = "0.2.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): formatting beneath time; jhpratt. Not covered by the imported audits at this version."
+
+[[exemptions.proc-macro-crate]]
+version = "1.2.1"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.proc-macro-crate]]
+version = "2.0.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.proc-macro-crate]]
+version = "3.5.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.proc-macro2]]
+version = "1.0.107"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, proc-macro support; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.prost]]
+version = "0.14.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): Protocol Buffers encoding of the key records (keys.md 5.2); tokio-rs, active upstream. Not covered by the imported audits at this version."
+
+[[exemptions.prost-derive]]
+version = "0.14.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): derive macro of prost; tokio-rs. Not covered by the imported audits at this version."
+
+[[exemptions.quick-xml]]
+version = "0.42.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.quinn]]
+version = "0.11.12"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): QUIC beneath libp2p-quic only (deny.toml wrapper); quinn-rs. Not covered by the imported audits at this version."
+
+[[exemptions.quinn-proto]]
+version = "0.11.19"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the QUIC state machine beneath quinn and libp2p-quic (deny.toml wrapper; its anti-amplification limit at its default, TM-22); quinn-rs. Not covered by the imported audits at this version."
+
+[[exemptions.r-efi]]
+version = "5.3.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): UEFI bindings beneath getrandom 0.3 on UEFI targets only; never built for the project's targets. Not covered by the imported audits at this version."
+
+[[exemptions.r-efi]]
+version = "6.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): UEFI bindings beneath getrandom (UEFI targets only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.rcgen]]
+version = "0.13.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p TLS certificate (a fresh P-256 key, self-signed, with the libp2p extension) inside libp2p-tls only (deny.toml wrapper); rustls/rcgen. Not covered by the imported audits at this version."
+
+[[exemptions.redox_syscall]]
+version = "0.5.18"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Redox bindings beneath parking_lot_core (Redox only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.redox_users]]
+version = "0.5.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.ref-cast]]
+version = "1.0.27"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.ref-cast-impl]]
+version = "1.0.27"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.regex]]
+version = "1.13.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.regex-automata]]
+version = "0.4.18"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.regex-syntax]]
+version = "0.8.11"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): dev-only via proptest; BurntSushi, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.reqwest]]
+version = "0.13.5"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.ring]]
+version = "0.17.11"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.rtnetlink]]
+version = "0.20.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Linux route netlink beneath if-watch; rust-netlink. Not covered by the imported audits at this version."
+
+[[exemptions.rustc-hash]]
+version = "2.1.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): a non-cryptographic hasher inside quinn and quinn-proto; rust-lang. Not covered by the imported audits at this version."
+
+[[exemptions.rusticata-macros]]
+version = "4.1.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): parser macros beneath x509-parser; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.rustix]]
+version = "1.1.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): POSIX system calls beneath async-io and polling; bytecodealliance, sunfishcode, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.rustls]]
+version = "0.23.37"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.rustls-pki-types]]
+version = "1.15.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): shared certificate and key types beneath rustls; rustls. Not covered by the imported audits at this version."
+
+[[exemptions.rustls-webpki]]
+version = "0.103.10"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.rustversion]]
+version = "1.0.23"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time compiler-version checks beneath wasm-bindgen; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.rw-stream-sink]]
+version = "0.5.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the libp2p transport stack (rust-libp2p, libp2p/rust-libp2p, the project's own crate). Not covered by the imported audits at this version."
+
+[[exemptions.same-file]]
+version = "1.0.6"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.schemars]]
+version = "0.8.12"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.schemars]]
+version = "0.8.22"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.schemars]]
+version = "1.2.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.schemars_derive]]
+version = "0.8.22"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.scopeguard]]
+version = "1.1.0"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.selectors]]
+version = "0.38.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serde]]
+version = "1.0.229"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): beneath multiaddr (licketysync-net) and serde_json in tests; dtolnay, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.serde-untagged]]
+version = "0.1.9"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serde_core]]
+version = "1.0.229"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): beneath serde, pem and time (licketysync-net) and serde_json in tests; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.serde_derive]]
+version = "1.0.229"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): build-time derive macro beneath serde_core; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.serde_derive_internals]]
+version = "0.29.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serde_json]]
+version = "1.0.154"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): dev-only: reading and writing the committed test vectors; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.serde_repr]]
+version = "0.1.21"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serde_spanned]]
+version = "0.6.8"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.serde_spanned]]
+version = "1.1.3"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serde_with]]
+version = "3.24.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serde_with_macros]]
+version = "3.24.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.serialize-to-javascript]]
+version = "0.1.2"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.serialize-to-javascript-impl]]
+version = "0.1.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.servo_arc]]
+version = "0.4.3"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.sha2]]
+version = "0.11.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): SHA-2 beneath ed25519-dalek (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.signature]]
+version = "3.0.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): signature traits beneath ed25519 (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.simd-adler32]]
+version = "0.3.10"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.siphasher]]
+version = "1.0.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): SipHash beneath fastbloom (quinn-proto's bloom filter, its retry-token replay check); jedisct1. Not covered by the imported audits at this version."
+
+[[exemptions.slab]]
+version = "0.4.12"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): slab storage beneath quinn-proto and futures; tokio-rs. Not covered by the imported audits at this version."
+
+[[exemptions.smallvec]]
+version = "1.16.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): small vectors beneath libp2p-swarm, multistream-select, idna and parking_lot_core; servo. Not covered by the imported audits at this version."
+
+[[exemptions.socket2]]
+version = "0.6.5"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): socket options beneath tokio, libp2p-tcp, libp2p-quic and quinn; rust-lang. Not covered by the imported audits at this version."
+
+[[exemptions.softbuffer]]
+version = "0.4.8"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.soup3]]
+version = "0.5.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.soup3-sys]]
+version = "0.5.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.stable_deref_trait]]
+version = "1.2.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.static_vcruntime]]
+version = "3.0.0"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.string_cache]]
+version = "0.9.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.string_cache_codegen]]
+version = "0.6.1"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.swift-rs]]
+version = "1.0.9"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.syn]]
+version = "1.0.96"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.syn]]
+version = "2.0.119"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, proc-macro parsing; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.syn]]
+version = "3.0.9"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys; licketysync-net, spike A, makes it a production dependency): build-time only, proc-macro parsing (libp2p-swarm-derive, thiserror-impl, tokio-macros, futures-macro, displaydoc and serde_derive); dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.synstructure]]
+version = "0.14.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.sysinfo]]
+version = "0.38.4"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): beneath libp2p-memory-connection-limits, which uses it only for its percentage limit, never called here; GuillaumeGomez. Not covered by the imported audits at this version."
+
+[[exemptions.system-configuration]]
+version = "0.7.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): macOS network configuration beneath if-watch (macOS only); mullvad. Not covered by the imported audits at this version."
+
+[[exemptions.system-configuration-sys]]
+version = "0.6.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): macOS SystemConfiguration bindings beneath system-configuration (macOS only); mullvad. Not covered by the imported audits at this version."
+
+[[exemptions.system-deps]]
+version = "6.2.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.tao]]
+version = "0.37.2"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.tao-macros]]
+version = "0.1.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.target-lexicon]]
+version = "0.12.16"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.tauri]]
+version = "2.12.5"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-build]]
+version = "2.7.4"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-codegen]]
+version = "2.7.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-macros]]
+version = "2.7.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-runtime]]
+version = "2.12.2"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-runtime-wry]]
+version = "2.12.3"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-utils]]
+version = "2.10.2"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.tauri-winres]]
+version = "0.3.7"
+criteria = "safe-to-deploy"
+notes = "Build-time only (beneath a build script or proc macro, Tauri's build step above all) or a host test dependency: not in the shipped app. Not covered by the imported audits at this version."
+
+[[exemptions.tendril]]
+version = "0.5.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.thiserror]]
+version = "1.0.30"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.thiserror]]
+version = "2.0.21"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): error derives beneath the libp2p crates and quinn; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.thiserror-impl]]
+version = "1.0.30"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.thiserror-impl]]
+version = "2.0.21"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time proc macro of thiserror; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.time]]
+version = "0.3.55"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): certificate validity times beneath rcgen, yasna and x509-parser; time-rs. Not covered by the imported audits at this version."
+
+[[exemptions.time-macros]]
+version = "0.2.32"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time macros of time; time-rs. Not covered by the imported audits at this version."
+
+[[exemptions.tinystr]]
+version = "0.8.5"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.tokio]]
+version = "1.54.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the async runtime (the workspace's first: libp2p's tokio provider, quinn's runtime; tests and the example use it too); tokio-rs, Darksonn, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.tokio-macros]]
+version = "2.7.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time macros of tokio (#[tokio::test], #[tokio::main]); tokio-rs. Not covered by the imported audits at this version."
+
+[[exemptions.tokio-util]]
+version = "0.7.20"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.toml]]
+version = "0.8.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.toml]]
+version = "1.2.1+spec-1.1.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.toml_datetime]]
+version = "0.6.2"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.toml_datetime]]
+version = "1.1.3+spec-1.1.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.toml_edit]]
+version = "0.19.15"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.toml_edit]]
+version = "0.25.19+spec-1.1.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.toml_parser]]
+version = "1.1.5+spec-1.1.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.toml_writer]]
+version = "1.2.0+spec-1.1.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.tower]]
+version = "0.5.3"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.tower-http]]
+version = "0.6.11"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.tower-layer]]
+version = "0.1.0"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.tower-service]]
+version = "0.3.1"
+criteria = "safe-to-deploy"
+notes = "Compiled for the phones, not linked: beneath reqwest, which Tauri uses only for its development-server proxy, code that custom-protocol compiles out (mobile/Cargo.toml). Not covered by the imported audits at this version."
+
+[[exemptions.tracing]]
+version = "0.1.44"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the logging facade of libp2p and quinn; tokio-rs. Nothing subscribes in phase 0; the daemon's subscriber redacts addresses (TM-6, phase 1). Not covered by the imported audits at this version."
+
+[[exemptions.tracing-attributes]]
+version = "0.1.31"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): build-time proc macro of tracing; tokio-rs. Not covered by the imported audits at this version."
+
+[[exemptions.typeid]]
+version = "1.0.3"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.typenum]]
+version = "1.20.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): type-level numbers beneath hybrid-array; paholg, widely used. Not covered by the imported audits at this version."
+
+[[exemptions.unicode-ident]]
+version = "1.0.27"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): build-time only, beneath proc-macro2 and syn; dtolnay. Not covered by the imported audits at this version."
+
+[[exemptions.universal-hash]]
+version = "0.6.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): universal hash traits beneath poly1305 (deny.toml wrapper); RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.unsigned-varint]]
+version = "0.8.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): varint framing of multistream-select and multiaddr; paritytech. Not covered by the imported audits at this version."
+
+[[exemptions.url]]
+version = "2.5.8"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): URL parsing beneath multiaddr (its /http and /dns parts; no DNS resolution is built); servo. Not covered by the imported audits at this version."
+
+[[exemptions.uuid]]
+version = "1.29.1"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.version-compare]]
+version = "0.2.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.version_check]]
+version = "0.9.5"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike B, feature webtransport): build-time only: rustc version detection in generic-array's build script; SergioBenitez. Not covered by the imported audits at this version."
+
+[[exemptions.vswhom]]
+version = "0.1.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.vswhom-sys]]
+version = "0.1.3"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.walkdir]]
+version = "2.5.0"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.wasi]]
+version = "0.11.0+wasi-snapshot-preview1"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.wasm-bindgen]]
+version = "0.2.108"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.wasm-bindgen-futures]]
+version = "0.4.58"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.wasm-bindgen-macro]]
+version = "0.2.108"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.wasm-bindgen-macro-support]]
+version = "0.2.108"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.wasm-bindgen-shared]]
+version = "0.2.108"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.wasm-streams]]
+version = "0.5.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.web-sys]]
+version = "0.3.85"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): wasm32 browser bindings beneath getrandom and libp2p-swarm's wasm executor (wasm32 only; never built here). Not covered by the imported audits at this version."
+
+[[exemptions.web_atoms]]
+version = "0.2.6"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.webkit2gtk]]
+version = "2.0.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.webkit2gtk-sys]]
+version = "2.0.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.webview2-com]]
+version = "0.39.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.webview2-com-macros]]
+version = "0.8.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.webview2-com-sys]]
+version = "0.39.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.winapi]]
+version = "0.3.9"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows API bindings beneath ntapi (Windows only); retep998. Not covered by the imported audits at this version."
+
+[[exemptions.winapi-i686-pc-windows-gnu]]
+version = "0.4.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows import libraries beneath winapi (Windows GNU only). Not covered by the imported audits at this version."
+
+[[exemptions.winapi-util]]
+version = "0.1.9"
+criteria = "safe-to-deploy"
+notes = "Base of an imported delta audit: the version in Cargo.lock is certified by an imported audit of the change from this version, which starts here. Not itself in the build."
+
+[[exemptions.winapi-x86_64-pc-windows-gnu]]
+version = "0.4.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows import libraries beneath winapi (Windows GNU only). Not covered by the imported audits at this version."
+
+[[exemptions.window-vibrancy]]
+version = "0.8.1"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows]]
+version = "0.62.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-collections]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-core]]
+version = "0.62.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-future]]
+version = "0.3.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-implement]]
+version = "0.60.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-interface]]
+version = "0.59.3"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-numerics]]
+version = "0.3.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-result]]
+version = "0.4.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-strings]]
+version = "0.5.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-sys]]
+version = "0.45.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows-sys]]
+version = "0.52.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-sys]]
+version = "0.61.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath tokio, mio, socket2, quinn-udp, if-watch, rustix and errno (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-targets]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows-targets]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-threading]]
+version = "0.2.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath if-watch (in libp2p-tcp and libp2p-quic) and sysinfo (in libp2p-memory-connection-limits) (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows-version]]
+version = "0.1.7"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_aarch64_gnullvm]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_aarch64_gnullvm]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_aarch64_msvc]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_aarch64_msvc]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_i686_gnu]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_i686_gnu]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_i686_gnullvm]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_i686_msvc]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_i686_msvc]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_x86_64_gnu]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_x86_64_gnu]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_x86_64_gnullvm]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_x86_64_gnullvm]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.windows_x86_64_msvc]]
+version = "0.42.2"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.windows_x86_64_msvc]]
+version = "0.52.6"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): Windows bindings (microsoft/windows-rs) beneath ring and the dev-only memory-stats (Windows only); kennykerr, whom the Mozilla set trusts. Not covered by the imported audits at this version."
+
+[[exemptions.winnow]]
+version = "0.5.40"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.winnow]]
+version = "1.0.5"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.winreg]]
+version = "0.56.0"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.writeable]]
+version = "0.6.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.wry]]
+version = "0.57.1"
+criteria = "safe-to-deploy"
+notes = "On the IPC path between the page and the shell (Tauri's invoke, its serialization, the WebView binding, the capability URL patterns, JNI): runtime on the phones. Not covered by the imported audits at this version."
+
+[[exemptions.x509-parser]]
+version = "0.18.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): parsing the peer's libp2p certificate inside libp2p-tls only; rusticata. Not covered by the imported audits at this version."
+
+[[exemptions.yamux]]
+version = "0.14.1"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): the TCP stream muxer beneath libp2p-yamux (TM-22: its stream count is set, its connection window is upstream's); libp2p/rust-yamux. Not covered by the imported audits at this version."
+
+[[exemptions.yasna]]
+version = "0.5.2"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): DER writing of the libp2p certificate extension beneath libp2p-tls and rcgen; qnighy. Not covered by the imported audits at this version."
+
+[[exemptions.yasna]]
+version = "0.6.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-net, spike A): DER writing of the libp2p certificate extension beneath libp2p-tls and rcgen; qnighy. Not covered by the imported audits at this version."
+
+[[exemptions.yoke]]
+version = "0.8.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.yoke-derive]]
+version = "0.8.4"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.zerofrom]]
+version = "0.1.8"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.zerofrom-derive]]
+version = "0.1.8"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.zeroize_derive]]
+version = "1.5.0"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): derive macro of zeroize; RustCrypto. Not covered by the imported audits at this version."
+
+[[exemptions.zerotrie]]
+version = "0.2.5"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.zerovec]]
+version = "0.11.9"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.zerovec-derive]]
+version = "0.11.7"
+criteria = "safe-to-deploy"
+notes = "Runtime on the phones, beneath Tauri. Not covered by the imported audits at this version."
+
+[[exemptions.zlib-rs]]
+version = "0.6.8"
+criteria = "safe-to-deploy"
+notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+
+[[exemptions.zmij]]
+version = "1.0.23"
+criteria = "safe-to-deploy"
+notes = "Phase 0 exemption (licketysync-keys): dev-only via serde_json; dtolnay. Not covered by the imported audits at this version."

@@ -1,0 +1,25 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: max(16px, env(safe-area-inset-top)) 16px 16px;
+}
+
+dd {
+  margin: 0 0 1em;
+  font-family: ui-monospace, monospace;
+  overflow-wrap: anywhere;
+}
+
+/* Tauri's isolation frame, which Tauri hides with an inline style that this
+   page's content security policy refuses. */
+#__tauri_isolation__ {
+  display: none;
+}

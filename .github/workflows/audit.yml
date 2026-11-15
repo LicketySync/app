@@ -1,0 +1,33 @@
+# Every day: cargo-audit over the app's Cargo.lock against that day's
+# advisories (TM-8), which a push's checks see only when something is pushed.
+# Warnings fail it but the three .cargo/audit.toml lists. The pinning rule is
+# in checks.yml's header.
+name: audit
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: cargo-audit (daily)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: app
+          persist-credentials: false
+      - run: app/ci/pins-to-env.sh >> "$GITHUB_ENV"
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
+        with:
+          toolchain: ${{ env.RUST_STABLE }}
+      - uses: taiki-e/install-action@3a3daafd3b7f23b8f65d9f5ba2db203fb59b79e2 # v2.90.2
+        with:
+          tool: cargo-audit@${{ env.CARGO_AUDIT }}
+          fallback: none
+      - run: cargo audit --deny warnings
+        working-directory: app
