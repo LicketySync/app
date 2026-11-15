@@ -36,24 +36,48 @@ fn json(text: &str) -> Value {
 /// The keys crate's vector for its device test seed
 /// (`crates/keys/tests/vectors/device.json`), read from cargo's checkout of
 /// core at `CORE_REV`, so that a move of `CORE_REV` that changes the vector
-/// fails here.
+/// fails here. Cargo checks a git dependency out under
+/// `$CARGO_HOME/git/checkouts/<name>-<hash>/<first 7 hex digits of the rev>/`
+/// (`CARGO_HOME` defaulting to `~/.cargo`), and the build of this crate put
+/// it there. (`cargo metadata --offline` cannot be asked instead: it needs
+/// every package of the lockfile, the other platforms' among them, which a
+/// build for one host never downloads.)
 fn device_vector() -> Value {
-    let out = std::process::Command::new(env!("CARGO"))
-        .args(["metadata", "--format-version", "1", "--locked", "--offline"])
-        .current_dir(env!("CARGO_MANIFEST_DIR"))
-        .output()
-        .unwrap();
-    assert!(out.status.success(), "cargo metadata failed");
-    let metadata: Value = serde_json::from_slice(&out.stdout).unwrap();
-    let keys = metadata["packages"]
-        .as_array()
+    let manifest = include_str!("../Cargo.toml");
+    let rev = manifest
+        .split("rev = \"")
+        .nth(1)
         .unwrap()
-        .iter()
-        .find(|p| p["name"] == "licketysync-keys")
+        .split('"')
+        .next()
         .unwrap();
-    let manifest = std::path::Path::new(keys["manifest_path"].as_str().unwrap());
-    let path = manifest.parent().unwrap().join("tests/vectors/device.json");
-    json(&std::fs::read_to_string(path).unwrap())
+    assert_eq!(rev.len(), 40, "mobile/Cargo.toml's rev is a full commit");
+    let home = std::env::var_os("CARGO_HOME").map_or_else(
+        || std::path::PathBuf::from(std::env::var_os("HOME").unwrap()).join(".cargo"),
+        std::path::PathBuf::from,
+    );
+    let checkouts = home.join("git").join("checkouts");
+    let vectors: Vec<_> = std::fs::read_dir(&checkouts)
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|dir| {
+            dir.file_name()
+                .and_then(|name| name.to_str())
+                .is_some_and(|name| name.starts_with("core-"))
+        })
+        .map(|dir| {
+            dir.join(&rev[..7])
+                .join("crates/keys/tests/vectors/device.json")
+        })
+        .filter(|path| path.is_file())
+        .collect();
+    assert_eq!(
+        vectors.len(),
+        1,
+        "one checkout of core at {rev} under {}: {vectors:?}",
+        checkouts.display()
+    );
+    json(&std::fs::read_to_string(&vectors[0]).unwrap())
 }
 
 #[test]
@@ -146,6 +170,19 @@ fn tauri_conf_keeps_the_security_settings() {
     assert_eq!(conf["build"].as_object().unwrap().len(), 1);
     assert_eq!(conf["build"]["frontendDist"], "../ui");
     assert!(!TAURI_CONF.contains("http"), "no URL in tauri.conf.json");
+}
+
+/// The iOS link needs `SystemConfiguration`: if-watch, beneath net's QUIC and
+/// TCP transports, calls it on Apple platforms, and Rust's static library
+/// does not carry that framework to Xcode's link (app CI's first iOS run
+/// failed on 37 undefined `SC*` symbols).
+#[test]
+fn ios_links_system_configuration_for_if_watch() {
+    let conf = json(TAURI_CONF);
+    assert_eq!(
+        conf["bundle"]["iOS"]["frameworks"],
+        serde_json::json!(["SystemConfiguration"])
+    );
 }
 
 /// TM-27: one capability, for the one window, holding only the one command.

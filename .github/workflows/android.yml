@@ -120,8 +120,10 @@ jobs:
             echo "$image is revision ${have:-none}, not $ANDROID_SYSTEM_IMAGE_REVISION (ci/pins.env)" >&2
             exit 1
           fi
+      # The emulator's evidence, whenever the check ran far enough to write
+      # it; skipped when an earlier step failed before the emulator started.
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: always()
+        if: ${{ !cancelled() && hashFiles('emulator/**') != '' }}
         with:
           name: emulator
           path: emulator

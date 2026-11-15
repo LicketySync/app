@@ -5,6 +5,21 @@ what changed and why.
 
 ## Unreleased
 
+- CI: the fixes the first runs on main called for.
+  - The peer ID test read core's vector through `cargo metadata --offline`, which needs every
+    package of the lockfile, the other platforms' among them, where a build for one host downloads
+    only its own, so it failed on a fresh runner. It now reads the vector from cargo's checkout of
+    core at `CORE_REV`, under `$CARGO_HOME/git/checkouts/`, and still fails when a move of
+    `CORE_REV` changes the vector.
+  - Gradle's dependency verification refused `kotlinx-coroutines-bom-1.8.0.pom`: the metadata had
+    been recorded from a warm Gradle cache, which never fetched nine BOM and parent POM files a
+    fresh one does. It is now recorded from an empty Gradle home, and a build from another empty one
+    passes it; the nine match Maven Central's published checksums.
+  - The iOS link failed on SystemConfiguration's symbols: if-watch, beneath net's QUIC and TCP
+    transports, calls it on Apple platforms, and a Rust static library does not carry the framework
+    to Xcode's link. `tauri.conf.json` names it (`bundle.iOS.frameworks`), and a test holds it
+    there.
+  - The emulator evidence's upload is skipped when an earlier step failed before the emulator ran.
 - The phone shell (phase 0's spike C): `mobile/`, a Tauri 2 app for Android and iOS that shows the
   page in `ui/` and links the core crates `licketysync-keys` and `licketysync-net`, a git dependency
   on the public core repository pinned by rev to `CORE_REV` (`ci/pins.env`). The page shows
@@ -65,7 +80,7 @@ what changed and why.
     lifecycle-process 2.11.0 and material 1.14.0, and no test dependencies. Gradle's dependency
     verification is on: `gradle/verification-metadata.xml` holds the SHA-256 of each artifact as
     first downloaded (trust on first use, signatures not checked). Cross-checked once against the
-    repositories' published checksum files: 731 of 758 artifacts match (Google Maven and Maven
+    repositories' published checksum files: 740 of 767 artifacts match (Google Maven and Maven
     Central's `.sha256`, or their `.sha1` against the downloaded file), none differs. 27 could not
     be cross-checked and stay trust-on-first-use: Kotlin Multiplatform metadata jars, AARs published
     under another name than the one Gradle gives them, and gradle-kotlin-dsl-plugins. PGP
