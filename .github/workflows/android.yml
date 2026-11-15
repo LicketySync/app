@@ -103,8 +103,10 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
-          api-level: ${{ env.ANDROID_PLATFORM }}
-          system-image-api-level: ${{ env.ANDROID_SYSTEM_IMAGE_API }}
+          # The SDK's name for the API level (ci/pins.env): the runner installs
+          # platforms;android-<api-level> and, with no system-image-api-level,
+          # the system image of the same level.
+          api-level: ${{ env.ANDROID_API_LEVEL }}
           target: google_apis
           arch: x86_64
           emulator-build: ${{ env.ANDROID_EMULATOR_BUILD }}
@@ -113,7 +115,7 @@ jobs:
           script: app/ci/emulator-check.sh app/mobile/gen/android/app/build/outputs/apk/x86_64/debug/app-x86_64-debug.apk emulator
       - name: Check the system image's revision
         run: |
-          image="system-images;android-$ANDROID_SYSTEM_IMAGE_API;google_apis;x86_64"
+          image="system-images;android-$ANDROID_API_LEVEL;google_apis;x86_64"
           have=$("$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed |
             awk -F'|' -v p="$image" '{ gsub(/ /, "", $1); gsub(/ /, "", $2) } $1 == p { print $2 }')
           if [ "$have" != "$ANDROID_SYSTEM_IMAGE_REVISION" ]; then

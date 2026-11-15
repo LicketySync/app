@@ -20,6 +20,11 @@ what changed and why.
     to Xcode's link. `tauri.conf.json` names it (`bundle.iOS.frameworks`), and a test holds it
     there.
   - The emulator evidence's upload is skipped when an earlier step failed before the emulator ran.
+  - The emulator did not start: android-emulator-runner installs `platforms;android-<api-level>`,
+    and the job passed the platform number, 37, where the SDK names the level `android-37.0` (it
+    has 37.0, 37.1 and 37.2, no 37). `ci/pins.env` now pins the emulator's level as the SDK names
+    it (`ANDROID_API_LEVEL`), which the runner uses for the platform and the system image alike, and
+    `ci/check-pins.sh` refuses any other source for it.
 - The phone shell (phase 0's spike C): `mobile/`, a Tauri 2 app for Android and iOS that shows the
   page in `ui/` and links the core crates `licketysync-keys` and `licketysync-net`, a git dependency
   on the public core repository pinned by rev to `CORE_REV` (`ci/pins.env`). The page shows

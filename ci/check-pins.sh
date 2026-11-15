@@ -8,8 +8,9 @@
 #   exactly `rustup override set "$RUST_STABLE"`, every input that names a version
 #   (toolchain, java-version, api-level, system-image-api-level,
 #   emulator-build, each tool of install-action's `tool:`) reads it from that
-#   environment, and no pinned value of four or more characters appears in a
-#   workflow as a word.
+#   environment (the emulator's API level from ANDROID_API_LEVEL alone, with
+#   no system-image-api-level beside it), and no pinned value of four or more
+#   characters appears in a workflow as a word.
 # - mobile/Cargo.toml: every git dependency names a rev, and every
 #   `rev = "…"` is CORE_REV (at least one); no branch or tag.
 # - mobile/gen/android/app/build.gradle.kts: every compileSdk and targetSdk is
@@ -60,6 +61,11 @@ for wf in "${workflows[@]}"; do
   literal=$(g -nE '^[[:space:]]*(-[[:space:]]+)?(toolchain|java-version|api-level|system-image-api-level|emulator-build):' "$wf" |
     g -vE ':[[:space:]]*\$\{\{ env\.[A-Z0-9_]+ \}\}[[:space:]]*$')
   [ -z "$literal" ] || bad "$wf: a version input that does not read the environment: $literal"
+  # The emulator's API level is the SDK's package name for it (37.0), not
+  # the platform number compileSdk takes (37): the SDK has no android-37.
+  api=$(g -nE '^[[:space:]]*(-[[:space:]]+)?(system-image-)?api-level:' "$wf" |
+    g -vE ':[[:space:]]*api-level:[[:space:]]*\$\{\{ env\.ANDROID_API_LEVEL \}\}[[:space:]]*$')
+  [ -z "$api" ] || bad "$wf: an API level other than env.ANDROID_API_LEVEL: $api"
   tools=$(g -E '^[[:space:]]*tool:' "$wf" | sed -E 's/^[[:space:]]*tool:[[:space:]]*//' | tr ',' '\n' |
     g -vE '^[a-z0-9-]+@\$\{\{ env\.[A-Z0-9_]+ \}\}[[:space:]]*$')
   [ -z "$tools" ] || bad "$wf: a tool not pinned through the environment: $tools"

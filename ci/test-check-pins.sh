@@ -55,6 +55,10 @@ must_fail no-rustup-override .github/workflows/ios.yml '/rustup override set/d'
 must_fail export-moved-between-jobs .github/workflows/checks.yml '0,/(run: app\/ci\/pins-to-env\.sh >> "\$GITHUB_ENV")/s//\1\n      - \1/; /^  gitleaks:/,${/pins-to-env/d}'
 must_fail git-without-rev mobile/Cargo.toml '0,/, rev = "[0-9a-f]+"/s///'
 must_fail git-on-a-branch mobile/Cargo.toml '0,/rev = "[0-9a-f]+"/s//rev = "6beadae98da55b8e055bd4e575ed69b373ee9102", branch = "main"/'
+# The first emulator run on CI asked for platforms;android-37, which the SDK
+# does not have (it names the level android-37.0).
+must_fail emulator-api-level-is-the-platform .github/workflows/android.yml 's/api-level: \$\{\{ env.ANDROID_API_LEVEL \}\}/api-level: ${{ env.ANDROID_PLATFORM }}/'
+must_fail emulator-system-image-api-level .github/workflows/android.yml 's/^(\s*)api-level: (.*)$/\1api-level: \2\n\1system-image-api-level: ${{ env.ANDROID_API_LEVEL }}/'
 if [ "$failures" -ne 0 ]; then
   exit 1
 fi
