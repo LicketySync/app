@@ -1,4 +1,4 @@
-# The iOS shell (spike C, C2), on every push to main and every pull request:
+# The iOS shell, on every push to main and every pull request:
 # an unsigned debug build for the iOS simulator (Apple silicon), uploaded as
 # an artifact with the generated project's entitlements and Info.plist printed
 # beside it; then, not blocking, the app opened in a simulator and a

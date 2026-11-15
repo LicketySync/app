@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Spike C's pass conditions C1 and C4 on a running Android emulator: installs
+# The phone shell's check on a running Android emulator: installs
 # the debug APK, opens it, waits until the page shows the test seed's peer ID
 # and "QUIC loopback: ok", takes a screenshot, and fails if the app crashed or
 # the page shows anything else. The page is read through the accessibility

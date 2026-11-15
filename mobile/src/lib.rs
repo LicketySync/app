@@ -3,7 +3,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 //! The phone shell of LicketySync: a Tauri 2 app for Android and iOS that
-//! shows the page in `ui/` and links the core crates (phase 0's spike C).
+//! shows the page in `ui/` and links the core crates.
 //!
 //! The page asks the shell one thing, the `status` command: the peer ID the
 //! keys crate gives the public test seed, and whether two swarms of the net

@@ -1,4 +1,4 @@
-# The Android shell (spike C, C1 and C4), on every push to main and every pull
+# The Android shell, on every push to main and every pull
 # request: clippy for Android, the x86_64 and aarch64 debug APKs (debug-signed
 # only), each APK's merged manifest (ci/check-manifest.sh), and the x86_64 one
 # on an emulator of the pinned API level, where ci/emulator-check.sh checks

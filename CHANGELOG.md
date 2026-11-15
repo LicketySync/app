@@ -5,6 +5,8 @@ what changed and why.
 
 ## Unreleased
 
+- Docs: the README describes the phone shell as the foundation the shells proper (desktop in phase
+  3, phones in phase 4) build on, not as a spike in progress.
 - CI: the fixes the first runs on main called for.
   - The peer ID test read core's vector through `cargo metadata --offline`, which needs every
     package of the lockfile, the other platforms' among them, where a build for one host downloads

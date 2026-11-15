@@ -1,5 +1,5 @@
 # The merged manifest of a built APK, as `aapt2 dump xmltree --file
-# AndroidManifest.xml` prints it, held to what spike C's C3 allows (TM-31):
+# AndroidManifest.xml` prints it, held to what the shell's security settings allow (TM-31):
 # - every element of a kind on an explicit list, and every attribute of each
 #   kind on that kind's list, so that a setting the libraries or a change add
 #   (a network security configuration, a shared user ID, a process, testOnly,

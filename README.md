@@ -5,10 +5,10 @@ and iOS. One interface everywhere; the shell owns what the platform owns
 (tray, notifications, file dialogs, safe areas), the page uses the system
 font, accent colour and light or dark setting.
 
-Today it holds the phone shell's first build: a Tauri 2 app that shows a
-one-page UI on Android and iOS and links the core crates. The desktop shells
-arrive in phase 3 and the phone shells proper in phase 4. The same UI bundle
-becomes the browser client published from the `web` repository.
+Today it holds the phone shell's foundation: a Tauri 2 app that shows a
+one-page UI on Android and iOS and links the core crates. The shells proper come
+next: desktop in phase 3, phones in phase 4. The same UI bundle becomes the
+browser client published from the `web` repository.
 
 ```
 ui/         the page: static HTML and one script (Leptos, built with trunk, later)
