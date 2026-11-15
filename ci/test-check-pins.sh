@@ -10,11 +10,12 @@ tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 cd "$repo"
 shopt -s nullglob
-files=(ci/pins.env Cargo.toml mobile/Cargo.toml mobile/gen/android/app/build.gradle.kts .github/workflows/*.yml)
-if [ ${#files[@]} -lt 4 ]; then
+workflows=(.github/workflows/*.yml)
+if [ ${#workflows[@]} -eq 0 ]; then
   echo "test-check-pins: no workflow under $repo/.github/workflows" >&2
   exit 1
 fi
+files=(ci/pins.env Cargo.toml mobile/Cargo.toml mobile/gen/android/app/build.gradle.kts "${workflows[@]}")
 for f in "${files[@]}"; do
   mkdir -p "$tmp/base/$(dirname "$f")"
   cp "$f" "$tmp/base/$f"
@@ -59,6 +60,22 @@ must_fail git-on-a-branch mobile/Cargo.toml '0,/rev = "[0-9a-f]+"/s//rev = "6bea
 # does not have (it names the level android-37.0).
 must_fail emulator-api-level-is-the-platform .github/workflows/android.yml 's/api-level: \$\{\{ env.ANDROID_API_LEVEL \}\}/api-level: ${{ env.ANDROID_PLATFORM }}/'
 must_fail emulator-system-image-api-level .github/workflows/android.yml 's/^(\s*)api-level: (.*)$/\1api-level: \2\n\1system-image-api-level: ${{ env.ANDROID_API_LEVEL }}/'
+# The guard against a tree with no workflow: this script in a tree that has the
+# four fixed files but no .github/workflows/*.yml must fail, and say why.
+rm -rf "$tmp/empty"
+mkdir -p "$tmp/empty/ci"
+cp "$here/test-check-pins.sh" "$tmp/empty/ci/"
+for f in ci/pins.env Cargo.toml mobile/Cargo.toml mobile/gen/android/app/build.gradle.kts; do
+  mkdir -p "$tmp/empty/$(dirname "$f")"
+  cp "$f" "$tmp/empty/$f"
+done
+if "$tmp/empty/ci/test-check-pins.sh" 2> "$tmp/empty/err" > /dev/null; then
+  echo "test-check-pins: a tree without workflows passed" >&2
+  failures=$((failures + 1))
+elif ! grep -q "no workflow under" "$tmp/empty/err"; then
+  echo "test-check-pins: a tree without workflows failed for another reason" >&2
+  failures=$((failures + 1))
+fi
 if [ "$failures" -ne 0 ]; then
   exit 1
 fi

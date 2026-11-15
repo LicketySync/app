@@ -33,11 +33,36 @@ fn json(text: &str) -> Value {
     serde_json::from_str(text).unwrap()
 }
 
+/// The names, among a checkout directory's entries, that are cargo's checkout
+/// of `rev`: at least 7 leading hex digits of it. Cargo's abbreviation length
+/// is not a promise.
+fn checkout_names<'a>(rev: &str, names: &'a [String]) -> Vec<&'a str> {
+    names
+        .iter()
+        .map(String::as_str)
+        .filter(|name| name.len() >= 7 && rev.starts_with(name))
+        .collect()
+}
+
+#[test]
+fn checkout_names_match_any_abbreviation_of_seven_or_more() {
+    let rev = "0123456789abcdef0123456789abcdef01234567";
+    let names = |list: &[&str]| list.iter().map(|n| (*n).to_owned()).collect::<Vec<_>>();
+    assert_eq!(checkout_names(rev, &names(&["0123456"])), ["0123456"]);
+    assert_eq!(checkout_names(rev, &names(&["0123456789"])), ["0123456789"]);
+    assert_eq!(checkout_names(rev, &names(&["fedcba9"])), [] as [&str; 0]);
+    assert_eq!(checkout_names(rev, &names(&["012345"])), [] as [&str; 0]);
+    assert_eq!(
+        checkout_names(rev, &names(&["0123456", "0123456789", "other"])),
+        ["0123456", "0123456789"]
+    );
+}
+
 /// The keys crate's vector for its device test seed
 /// (`crates/keys/tests/vectors/device.json`), read from cargo's checkout of
 /// core at `CORE_REV`, so that a move of `CORE_REV` that changes the vector
 /// fails here. Cargo checks a git dependency out under
-/// `$CARGO_HOME/git/checkouts/<name>-<hash>/<first 7 hex digits of the rev>/`
+/// `$CARGO_HOME/git/checkouts/<name>-<hash>/<abbreviated rev>/`
 /// (`CARGO_HOME` defaulting to `~/.cargo`), and the build of this crate put
 /// it there. (`cargo metadata --offline` cannot be asked instead: it needs
 /// every package of the lockfile, the other platforms' among them, which a
@@ -65,9 +90,15 @@ fn device_vector() -> Value {
                 .and_then(|name| name.to_str())
                 .is_some_and(|name| name.starts_with("core-"))
         })
-        .map(|dir| {
-            dir.join(&rev[..7])
-                .join("crates/keys/tests/vectors/device.json")
+        .flat_map(|dir| {
+            let names: Vec<String> = std::fs::read_dir(&dir)
+                .unwrap()
+                .filter_map(|entry| entry.unwrap().file_name().into_string().ok())
+                .collect();
+            checkout_names(rev, &names)
+                .into_iter()
+                .map(|name| dir.join(name).join("crates/keys/tests/vectors/device.json"))
+                .collect::<Vec<_>>()
         })
         .filter(|path| path.is_file())
         .collect();

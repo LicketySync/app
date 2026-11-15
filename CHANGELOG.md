@@ -5,6 +5,12 @@ what changed and why.
 
 ## Unreleased
 
+- CI: two test fixes. The peer ID test finds cargo's checkout of core by any directory name that is
+  at least 7 leading digits of `CORE_REV`, not only the first 7, since cargo's abbreviation length
+  is not stable; it still requires exactly one match. `ci/test-check-pins.sh` checked the count of
+  its whole file list, which the four fixed files keep at 4 or more, so its "no workflow" guard
+  never fired; it now checks the workflow glob alone, and a test shows the guard failing on a tree
+  without workflows.
 - Docs: the README describes the phone shell as the foundation the shells proper (desktop in phase
   3, phones in phase 4) build on, not as a spike in progress.
 - CI: the fixes the first runs on main called for.
