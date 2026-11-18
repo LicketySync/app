@@ -25,7 +25,12 @@ version = 2
 # checkout there would block).
 db-urls = ["https://github.com/rustsec/advisory-db"]
 yanked = "deny"
-# The same list as .cargo/audit.toml's, for cargo-audit.
+# The same list as .cargo/audit.toml's, for cargo-audit, but chrono's
+# RUSTSEC-2026-0543, which is in .cargo/audit.toml only: chrono is locked but
+# never built (ci/check-chrono.sh says why, and fails if it ever is), so
+# cargo-audit, which reads the lockfile, reports it, and cargo-deny, which
+# resolves features, does not. Left out here, it stays an alarm should chrono
+# ever be built for the targets above.
 ignore = [
   # paste is archived, not vulnerable: a build-time proc macro beneath
   # netlink-packet-core 0.8, beneath if-watch 3.2.2, which libp2p-tcp and

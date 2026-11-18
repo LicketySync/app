@@ -232,7 +232,7 @@ notes = "Phase 0 exemption (licketysync-keys): the approved XChaCha20-Poly1305 (
 [[exemptions.chrono]]
 version = "0.4.45"
 criteria = "safe-to-deploy"
-notes = "Desktop back end only (Tauri on Linux, macOS or Windows), never built for the phones. Not covered by the imported audits at this version."
+notes = "Locked as serde_with's optional dependency, beneath tauri-utils, and never built for any target (ci/check-chrono.sh). Not covered by the imported audits at this version."
 
 [[exemptions.cipher]]
 version = "0.5.2"

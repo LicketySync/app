@@ -1,6 +1,6 @@
 # Every day: cargo-audit over the app's Cargo.lock against that day's
 # advisories (TM-8), which a push's checks see only when something is pushed.
-# Warnings fail it but the three .cargo/audit.toml lists. The pinning rule is
+# Warnings fail it but the four .cargo/audit.toml lists. The pinning rule is
 # in checks.yml's header.
 name: audit
 

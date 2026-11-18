@@ -5,6 +5,20 @@ what changed and why.
 
 ## Unreleased
 
+- CI: the daily audit failed on RUSTSEC-2026-0543, new in the advisory database: chrono is
+  unmaintained (every version; no fix). chrono is in `Cargo.lock` but never built: it is
+  serde_with's optional `chrono_0_4` (serde_with is beneath `tauri-utils`), which serde_with's
+  `std` and `alloc` features name only as weak dependency features (`chrono_0_4?/std`) and nothing
+  turns on, and cargo locks such a dependency all the same (rust-lang/cargo#10801). cargo-audit,
+  which reads the lockfile, reports it; cargo-deny, which resolves features, does not. No release of
+  serde_with or `tauri-utils` drops it. `.cargo/audit.toml` now ignores the advisory; `deny.toml`
+  does not, so that cargo-deny stays a second alarm should chrono ever be built for its targets.
+  `ci/check-chrono.sh`, in the gate and CI, keeps the ignore from hiding a real dependency: it fails
+  if any locked chrono is built for any target, with every feature of every workspace member on, as
+  a normal, build or dev dependency; if cargo cannot answer with the lockfile as it is, or the
+  lockfile cannot be read; and once chrono leaves `Cargo.lock`, so that the ignore goes with it.
+  `ci/test-check-chrono.sh` tests it, a case for each. chrono's cargo-vet exemption no longer calls
+  it the desktop back end's.
 - CI: two test fixes. The peer ID test finds cargo's checkout of core by any directory name that is
   at least 7 leading digits of `CORE_REV`, not only the first 7, since cargo's abbreviation length
   is not stable; it still requires exactly one match. `ci/test-check-pins.sh` checked the count of

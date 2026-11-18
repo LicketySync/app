@@ -68,7 +68,7 @@ jobs:
         working-directory: app
 
   deps:
-    name: cargo-deny, cargo-audit, cargo-machete, cargo-vet, typos
+    name: cargo-deny, cargo-audit, check-chrono, cargo-machete, cargo-vet, typos
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -88,6 +88,7 @@ jobs:
         working-directory: app
       - run: cargo audit --deny warnings
         working-directory: app
+      - run: app/ci/check-chrono.sh
       - run: cargo machete
         working-directory: app
       - run: cargo vet --locked
@@ -124,6 +125,7 @@ jobs:
       - run: '"$CORE_DIR/ci/pinned-actions.sh" app/.github/workflows'
       - run: app/ci/test-check-pins.sh
       - run: app/ci/test-check-manifest.sh
+      - run: app/ci/test-check-chrono.sh
 
   # The gitleaks command-line tool, installed by core's script (its pin and
   # checksum are core's ci/pins.env), over the app's whole history.

@@ -4,13 +4,14 @@
 # and the simulator. Pins first (ci/check-pins.sh, then each tool's version),
 # then fmt; clippy pedantic with -D warnings on the host and for Android; the
 # tests and doc-tests; rustdoc with warnings denied; cargo-deny; cargo-audit
-# denying warnings (.cargo/audit.toml lists the three it allows); cargo-machete;
-# cargo-vet; cargo-udeps; typos; core's Semgrep project rules (TM-7) and
-# no-hostnames check (TM-31) over the app; gitleaks over the history and the
-# working tree (skipped when gitleaks is not installed); core's check that
-# every action is pinned by commit; and the tests of the CI scripts. The APKs,
-# their merged manifests and the emulator are CI's (android.yml), as is the
-# iOS build (ios.yml).
+# denying warnings (.cargo/audit.toml lists the four it allows), and
+# ci/check-chrono.sh, which fails if chrono, whose advisory is one of them, is
+# ever built; cargo-machete; cargo-vet; cargo-udeps; typos; core's Semgrep
+# project rules (TM-7) and no-hostnames check (TM-31) over the app; gitleaks
+# over the history and the working tree (skipped when gitleaks is not
+# installed); core's check that every action is pinned by commit; and the
+# tests of the CI scripts. The APKs, their merged manifests and the emulator
+# are CI's (android.yml), as is the iOS build (ios.yml).
 #
 # Core's checks that do not apply to the app, and why:
 # - cargo-geiger: deferred to phases 3 and 4 (the shells proper). Run as core
@@ -92,6 +93,7 @@ step cargo test --locked --workspace
 step env RUSTDOCFLAGS='-D warnings' cargo doc --locked --workspace --no-deps --document-private-items
 step cargo deny check
 step cargo audit --deny warnings
+step ci/check-chrono.sh
 step cargo machete
 step cargo vet --locked
 step cargo "+$RUST_NIGHTLY" udeps --locked --workspace --all-targets
@@ -127,4 +129,5 @@ step "$core/ci/pinned-actions.sh" .github/workflows
 # them from its workspace's root; ci/check-manifest.sh itself runs on CI's APKs.
 step env -C / "$PWD/ci/test-check-pins.sh"
 step env -C / "$PWD/ci/test-check-manifest.sh"
+step env -C / "$PWD/ci/test-check-chrono.sh"
 echo "== gate passed"
