@@ -5,6 +5,9 @@ what changed and why.
 
 ## Unreleased
 
+- cargo-vet: 79 exemption notes said the crate was the desktop back end's, "never built for the phones". None is built for any target: 57 are Tauri's
+  Linux, macOS and Windows dependencies, which the app depends on for Android and iOS only; 9 are jni's Windows-only dependencies; 12 are in `Cargo.lock` only
+  (optional dependencies of serde_with, chrono and flate2); 1 is reqwest's wasm32 dependency. Each note now says so; notes only, and cargo-vet ignores them.
 - CI: the daily audit failed on RUSTSEC-2026-0543, new in the advisory database: chrono is
   unmaintained (every version; no fix). chrono is in `Cargo.lock` but never built: it is
   serde_with's optional `chrono_0_4` (serde_with is beneath `tauri-utils`), which serde_with's
