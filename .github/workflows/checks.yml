@@ -49,7 +49,7 @@ jobs:
         with:
           workspaces: app
           cache-workspace-crates: false
-      - uses: taiki-e/install-action@3a3daafd3b7f23b8f65d9f5ba2db203fb59b79e2 # v2.90.2
+      - uses: taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519 # v2.90.5
         with:
           tool: cargo-udeps@${{ env.CARGO_UDEPS }}
           fallback: none
@@ -79,7 +79,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
         with:
           toolchain: ${{ env.RUST_STABLE }}
-      - uses: taiki-e/install-action@3a3daafd3b7f23b8f65d9f5ba2db203fb59b79e2 # v2.90.2
+      - uses: taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519 # v2.90.5
         with:
           tool: cargo-deny@${{ env.CARGO_DENY }},cargo-audit@${{ env.CARGO_AUDIT }},cargo-machete@${{ env.CARGO_MACHETE }},typos@${{ env.TYPOS }}
           fallback: none
