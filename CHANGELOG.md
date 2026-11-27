@@ -5,6 +5,7 @@ what changed and why.
 
 ## Unreleased
 
+- Dependencies: the daily audit failed on two advisories, fixed by updating `Cargo.lock`. RUSTSEC-2026-0592: `url` 2.5.8 and earlier overflow the stack in `Url::origin()` on nested `blob:` URLs (fixed in 2.5.9; `url` is beneath `multiaddr`, `reqwest`, `tauri` and others; `form_urlencoded` 1.2.3 comes with it). RUSTSEC-2026-0594: `cookie` 0.18.2 and earlier can repeat private-cookie nonces in a process that forks (fixed in 0.18.3; `cookie` is beneath `tauri`, `tauri-runtime` and `wry`). No built code calls `Url::origin`, `url::quirks::origin`, or the private jar's `add` or `add_original`, so neither flaw was reachable. cargo-vet: the `url` and `cookie` exemptions move to the new versions, and `form_urlencoded` 1.2.3, which the imported audits do not yet cover, gets one.
 - cargo-vet: 79 exemption notes said the crate was the desktop back end's, "never built for the phones". None is built for any target: 57 are Tauri's
   Linux, macOS and Windows dependencies, which the app depends on for Android and iOS only; 9 are jni's Windows-only dependencies; 12 are in `Cargo.lock` only
   (optional dependencies of serde_with, chrono and flate2); 1 is reqwest's wasm32 dependency. Each note now says so; notes only, and cargo-vet ignores them.
